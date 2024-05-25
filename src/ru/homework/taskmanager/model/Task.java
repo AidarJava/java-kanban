@@ -1,3 +1,7 @@
+package ru.homework.taskmanager;
+
+import ru.homework.taskmanager.service.TaskStatus;
+
 import java.util.Objects;
 
 public class Task {
@@ -40,7 +44,7 @@ public class Task {
 
     @Override
     public String toString() {
-        return "Task{" +
+        return "ru.homework.taskmanager.Task{" +
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", id=" + id +

@@ -1,7 +1,9 @@
+package ru.homework.taskmanager;
+
 import java.util.ArrayList;
 
 public class Epic extends Task {
-    ArrayList<Integer> subtaskId = new ArrayList<>();
+    private ArrayList<Integer> subtaskId = new ArrayList<>();
 
     public Epic(String name, String description) {
         super(name, description);
@@ -11,9 +13,17 @@ public class Epic extends Task {
         super(name, description, id);
     }
 
+    public ArrayList<Integer> getSubtaskId() {
+        return subtaskId;
+    }
+
+    public void setSubtaskId(ArrayList<Integer> subtaskId) {
+        this.subtaskId = subtaskId;
+    }
+
     @Override
     public String toString() {
-        return "Epic{" +
+        return "ru.homework.taskmanager.Epic{" +
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", id=" + id +

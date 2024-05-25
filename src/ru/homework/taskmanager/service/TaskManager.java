@@ -1,3 +1,9 @@
+package ru.homework.taskmanager.service;
+
+import ru.homework.taskmanager.model.Epic;
+import ru.homework.taskmanager.model.Subtask;
+import ru.homework.taskmanager.model.Task;
+
 import java.util.HashMap;
 import java.util.ArrayList;
 
@@ -54,14 +60,14 @@ public class TaskManager {
         if (!subtasks.isEmpty()) {
             epic.status = TaskStatus.DONE;//авансом устанавливаем статус эпика
             for (Subtask sub : subtasks.values()) {
-                if (sub.epicId == epic.getId() && !subtaskIdToEpic.contains(sub.id)) {//2-е условие-проверка на дублирование
+                if (sub.getEpicId() == epic.getId() && !subtaskIdToEpic.contains(sub.id)) {//2-е условие-проверка на дублирование
                     subtaskIdToEpic.add(sub.id);//добавлям id подзадачи в эпик
                     if (epic.status == TaskStatus.DONE && //для того,чтобы зайти 1 раз
                        (sub.status == TaskStatus.IN_PROGRESS || sub.status == TaskStatus.NEW)) {//проверяем статус подзадач
                         epic.status = TaskStatus.IN_PROGRESS;//если зашли, то меняем статус эпика
                     }
                 }
-                epic.subtaskId = subtaskIdToEpic;
+                epic.setSubtaskId(subtaskIdToEpic);
             }
         }
         epics.put(epic.getId(), epic);
@@ -117,7 +123,7 @@ public class TaskManager {
     public boolean deleteAllSubtasks() {
         subtasks.clear();
         for(Epic ep: epics.values()){
-            ep.subtaskId.clear();//очищаем все аррай листы с номерами подзадач
+            ep.getSubtaskId().clear();//очищаем все аррай листы с номерами подзадач
         }
         return subtasks.isEmpty();
     }
@@ -135,8 +141,8 @@ public class TaskManager {
         if (!epics.containsKey(epicId)) {
             return false;
         }
-        if (!epics.get(epicId).subtaskId.isEmpty()) {//проверка, что у эпика есть подзадачи
-            for (Integer idSub : epics.get(epicId).subtaskId) {
+        if (!epics.get(epicId).getSubtaskId().isEmpty()) {//проверка, что у эпика есть подзадачи
+            for (Integer idSub : epics.get(epicId).getSubtaskId()) {
                     subtasks.remove(idSub);//удаляем подзадачи этого эпика
                 }
             }
@@ -149,7 +155,7 @@ public class TaskManager {
             return false;
         }
         int numEpicId= subtasks.get(subtaskId).getEpicId();//номер эпика, в котором лежит подзадача
-        epics.get(numEpicId).subtaskId.remove(Integer.valueOf(subtaskId));//удаляем подзадачу из аррей листа эпика
+        epics.get(numEpicId).getSubtaskId().remove(Integer.valueOf(subtaskId));//удаляем подзадачу из аррей листа эпика
         subtasks.remove(subtaskId);
         return !subtasks.containsKey(subtaskId);
     }

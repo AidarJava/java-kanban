@@ -1,3 +1,7 @@
+package ru.homework.taskmanager;
+
+import ru.homework.taskmanager.service.TaskStatus;
+
 public class Subtask extends Task {
     int epicId;
 
@@ -17,7 +21,7 @@ public class Subtask extends Task {
 
     @Override
     public String toString() {
-        return "Subtask{" +
+        return "ru.homework.taskmanager.Subtask{" +
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", id=" + id +
