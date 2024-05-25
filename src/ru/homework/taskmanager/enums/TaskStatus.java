@@ -1,4 +1,4 @@
-package ru.homework.taskmanager.service;
+package ru.homework.taskmanager.enums;
 
 public enum TaskStatus{
     NEW,

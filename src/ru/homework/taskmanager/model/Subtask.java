@@ -1,6 +1,6 @@
-package ru.homework.taskmanager;
+package ru.homework.taskmanager.model;
 
-import ru.homework.taskmanager.service.TaskStatus;
+import ru.homework.taskmanager.enums.TaskStatus;
 
 public class Subtask extends Task {
     int epicId;
@@ -21,7 +21,7 @@ public class Subtask extends Task {
 
     @Override
     public String toString() {
-        return "ru.homework.taskmanager.Subtask{" +
+        return "Subtask{" +
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", id=" + id +

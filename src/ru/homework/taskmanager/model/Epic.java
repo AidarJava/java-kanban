@@ -1,4 +1,4 @@
-package ru.homework.taskmanager;
+package ru.homework.taskmanager.model;
 
 import java.util.ArrayList;
 
@@ -23,7 +23,7 @@ public class Epic extends Task {
 
     @Override
     public String toString() {
-        return "ru.homework.taskmanager.Epic{" +
+        return "Epic{" +
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", id=" + id +

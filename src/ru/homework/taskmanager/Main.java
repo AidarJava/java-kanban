@@ -1,6 +1,10 @@
 package ru.homework.taskmanager;
-import java.util.HashMap;
-import java.util.ArrayList;
+
+import ru.homework.taskmanager.model.Epic;
+import ru.homework.taskmanager.model.Subtask;
+import ru.homework.taskmanager.model.Task;
+import ru.homework.taskmanager.service.TaskManager;
+import ru.homework.taskmanager.enums.TaskStatus;
 
 public class Main {
 
@@ -9,6 +13,7 @@ public class Main {
     }
 
     public static void testingTask() {
+
         TaskManager manager = new TaskManager();
         System.out.println("Проверка на создание задач,эпиков и подзадач");
         //_______________________________проверка работы с тасками___________________________________________

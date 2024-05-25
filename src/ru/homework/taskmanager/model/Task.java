@@ -1,6 +1,6 @@
-package ru.homework.taskmanager;
+package ru.homework.taskmanager.model;
 
-import ru.homework.taskmanager.service.TaskStatus;
+import ru.homework.taskmanager.enums.TaskStatus;
 
 import java.util.Objects;
 
@@ -44,7 +44,7 @@ public class Task {
 
     @Override
     public String toString() {
-        return "ru.homework.taskmanager.Task{" +
+        return "Task{" +
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", id=" + id +
