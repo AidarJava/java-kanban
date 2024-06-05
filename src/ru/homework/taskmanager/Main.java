@@ -3,8 +3,8 @@ package ru.homework.taskmanager;
 import ru.homework.taskmanager.model.Epic;
 import ru.homework.taskmanager.model.Subtask;
 import ru.homework.taskmanager.model.Task;
-import ru.homework.taskmanager.service.TaskManager;
 import ru.homework.taskmanager.enums.TaskStatus;
+import ru.homework.taskmanager.service.*;
 
 public class Main {
 
@@ -14,7 +14,9 @@ public class Main {
 
     public static void testingTask() {
 
-        TaskManager manager = new TaskManager();
+        TaskManager manager = Managers.getDefault();
+        HistoryManager managerHis = Managers.getDefaultHistory();
+
         System.out.println("Проверка на создание задач,эпиков и подзадач");
         //_______________________________проверка работы с тасками___________________________________________
         System.out.println("Создаем задачи");
@@ -111,5 +113,52 @@ public class Main {
         System.out.println(manager.getSubtascs());
         System.out.println("Проверяем список эпиков, на изменение входящих в него подзадач");
         System.out.println(manager.getEpics());
+        System.out.println("_________________________________________________________________________________");
+//_______________________________проверка работы сохранения истории___________________________________________
+        System.out.println("Создаем задачи");
+        Task task6 = new Task("Задача1", "Проверка сохранения истории задачи1", TaskStatus.NEW);
+        System.out.println(manager.createTask(task6));
+        Task task7 = new Task("Задача2", "Проверка сохранения истории задачи2", TaskStatus.IN_PROGRESS);
+        System.out.println(manager.createTask(task7));
+        Task task8 = new Task("Задача3", "Проверка сохранения истории задачи3", TaskStatus.DONE);
+        System.out.println(manager.createTask(task8));
+        System.out.println("Создаем эпики");
+        Epic epic6 = new Epic("Эпик1", "Проверка сохранения истории эпика1");
+        System.out.println(manager.createEpic(epic6));
+        Epic epic7 = new Epic("Эпик2", "Проверка сохранения истории эпика2");
+        System.out.println(manager.createEpic(epic7));
+        System.out.println("Создаем подзадачи");
+        Subtask sub7 = new Subtask("Подзадача1", "Проверка сохранения истории подзадачи1", TaskStatus.DONE, 14);
+        System.out.println(manager.createSubtask(sub7));
+        Subtask sub8 = new Subtask("Подзадача2", "Проверка сохранения истории подзадачи2", TaskStatus.DONE, 14);
+        System.out.println(manager.createSubtask(sub8));
+        Subtask sub9 = new Subtask("Подзадача3", "Проверка сохранения истории подзадачи3", TaskStatus.DONE, 14);
+        System.out.println(manager.createSubtask(sub9));
+        Subtask sub10 = new Subtask("Подзадача4", "Проверка сохранения истории подзадачи4", TaskStatus.DONE, 15);
+        System.out.println(manager.createSubtask(sub10));
+        Subtask sub11 = new Subtask("Подзадача5", "Проверка сохранения истории подзадачи5", TaskStatus.DONE, 15);
+        System.out.println(manager.createSubtask(sub11));
+        Subtask sub12 = new Subtask("Подзадача6", "Проверка сохранения истории подзадачи6", TaskStatus.DONE, 15);
+        System.out.println(manager.createSubtask(sub12));
+        System.out.println("Заполняем список истории просмотров");
+        for (int i = 11; i <=13; i++) {
+            System.out.println(manager.getTaskById(i));
+        }
+        for (int i = 14; i <=15 ; i++) {
+            System.out.println(manager.getEpicById(i));
+                    }
+        for (int i = 16; i <=20 ; i++) {
+            System.out.println(manager.getSubtaskById(i));
+        }
+        System.out.println("Проверяем историю просмотров");
+        System.out.println(managerHis.getHistory());
+        System.out.println("Получаем подзадачу по id=21)");
+        System.out.println(manager.getSubtaskById(21));
+        System.out.println("Проверяем историю просмотров, список должен сместиться на 1 элемент");
+        System.out.println(managerHis.getHistory());
+        System.out.println("Получаем подзадачу по id=22)");
+        System.out.println(manager.getSubtaskById(22));
+        System.out.println("Проверяем историю просмотров, null не должен добавляться в список");
+        System.out.println(managerHis.getHistory());
     }
 }

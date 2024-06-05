@@ -2,6 +2,7 @@ package ru.homework.taskmanager.model;
 
 import ru.homework.taskmanager.enums.TaskStatus;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class Task {
@@ -9,6 +10,7 @@ public class Task {
     public String description;
     public Integer id;
     public TaskStatus status;
+
 
     public Task(String name, String description) {
         this.name = name;
@@ -19,6 +21,18 @@ public class Task {
         this.name = name;
         this.description = description;
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public TaskStatus getStatus() {
+        return status;
     }
 
     public Task(String name, String description, TaskStatus status) {
