@@ -8,7 +8,7 @@ import ru.homework.taskmanager.model.Task;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class cdInMemoryTaskManager implements TaskManager {
+public class InMemoryTaskManager implements TaskManager {
     private int nextId;
 
     private final HashMap<Integer, Task> tasks = new HashMap<>();

@@ -51,5 +51,4 @@ public interface TaskManager{
 
     boolean deleteSubtaskById(int subtaskId);
 
-    //ArrayList<Task> getMemoryHistoryManager();
 }
