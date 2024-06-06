@@ -6,7 +6,7 @@ import ru.homework.taskmanager.model.Task;
 import ru.homework.taskmanager.service.Managers;
 import ru.homework.taskmanager.service.TaskManager;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -23,7 +23,7 @@ class SubtaskTest {
         assertNotNull(savedSubtask, "Подзадача не найдена.");
         assertEquals(subtask, savedSubtask, "Подзадачи не совпадают.");
 
-        final ArrayList<Subtask> subtasks = taskManager.getSubtascs();
+        final List<Subtask> subtasks = taskManager.getSubtascs();
 
         assertNotNull(subtasks, "Подзадачи не возвращаются.");
         assertEquals(1, subtasks.size(), "Неверное количество подзадач.");

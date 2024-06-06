@@ -3,7 +3,7 @@ package ru.homework.taskmanager.model;
 import ru.homework.taskmanager.enums.TaskStatus;
 
 public class Subtask extends Task {
-    int epicId;
+    private int epicId;
 
     public Subtask(String name, String description, TaskStatus status, int epicId) {
         super(name, description, status);

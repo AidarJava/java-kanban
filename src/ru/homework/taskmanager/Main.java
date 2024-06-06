@@ -13,9 +13,8 @@ public class Main {
     }
 
     public static void testingTask() {
-
         TaskManager manager = Managers.getDefault();
-        HistoryManager managerHis = Managers.getDefaultHistory();
+        TaskManager manager2 = Managers.getDefault();
 
         System.out.println("Проверка на создание задач,эпиков и подзадач");
         //_______________________________проверка работы с тасками___________________________________________
@@ -151,14 +150,23 @@ public class Main {
             System.out.println(manager.getSubtaskById(i));
         }
         System.out.println("Проверяем историю просмотров");
-        System.out.println(managerHis.getHistory());
+        System.out.println(manager.getHistoryManager().getHistory());
         System.out.println("Получаем подзадачу по id=21)");
         System.out.println(manager.getSubtaskById(21));
         System.out.println("Проверяем историю просмотров, список должен сместиться на 1 элемент");
-        System.out.println(managerHis.getHistory());
+        System.out.println(manager.getHistoryManager().getHistory());
         System.out.println("Получаем подзадачу по id=22)");
         System.out.println(manager.getSubtaskById(22));
         System.out.println("Проверяем историю просмотров, null не должен добавляться в список");
-        System.out.println(managerHis.getHistory());
+        System.out.println(manager.getHistoryManager().getHistory());
+        System.out.println("_________________________________________________________________________________");
+//_______________________________продолжение проверки работы истории___________________________________________
+        System.out.println("Создаем задачу для проверки истории медеждера2");
+        Task task10 = new Task("Задача1", "Проверка сохранения истории задачи1", TaskStatus.NEW);
+        System.out.println(manager2.createTask(task10));
+        System.out.println("Получаем подзадачу по id=0)");
+        System.out.println(manager2.getTaskById(0));
+        System.out.println("Проверяем историю просмотров");
+        System.out.println(manager2.getHistoryManager().getHistory());
     }
 }

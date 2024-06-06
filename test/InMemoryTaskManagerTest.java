@@ -3,6 +3,7 @@ import ru.homework.taskmanager.enums.TaskStatus;
 import ru.homework.taskmanager.model.Epic;
 import ru.homework.taskmanager.model.Subtask;
 import ru.homework.taskmanager.model.Task;
+import ru.homework.taskmanager.service.InMemoryHistoryManager;
 import ru.homework.taskmanager.service.InMemoryTaskManager;
 
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class InMemoryTaskManagerTest {
     @Test
     public void shouldInMemoryTaskManagerCanCreateAndFindForId() {
-        InMemoryTaskManager manager = new InMemoryTaskManager();
+        InMemoryTaskManager manager = new InMemoryTaskManager(new InMemoryHistoryManager());
         Task task1 = new Task("Задача1", "Проверка создания1", TaskStatus.NEW);
         manager.createTask(task1);
         assertNotNull(manager.getTasks(), "Не добавил задачу");
@@ -29,7 +30,7 @@ class InMemoryTaskManagerTest {
 
     @Test
     public void shouldBeNoConflictWithGenAndCreate() {
-        InMemoryTaskManager manager = new InMemoryTaskManager();
+        InMemoryTaskManager manager = new InMemoryTaskManager(new InMemoryHistoryManager());
         Task task1 = new Task("Задача1", "Проверка конфликта1", TaskStatus.NEW);
         manager.createTask(task1);
         Task task2 = new Task("Задача2", "Проверка конфликта2", 0, TaskStatus.IN_PROGRESS);
@@ -43,7 +44,7 @@ class InMemoryTaskManagerTest {
 
     @Test
     public void addToManagerShouldBeEqualsWithItInitial() {
-        InMemoryTaskManager manager = new InMemoryTaskManager();
+        InMemoryTaskManager manager = new InMemoryTaskManager(new InMemoryHistoryManager());
         Task task1 = new Task("Задача1", "Проверка создания1", TaskStatus.NEW);
         manager.createTask(task1);
         assertEquals(task1.getName(), manager.getTaskById(0).getName());

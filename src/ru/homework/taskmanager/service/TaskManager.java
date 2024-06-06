@@ -4,7 +4,7 @@ import ru.homework.taskmanager.model.Epic;
 import ru.homework.taskmanager.model.Subtask;
 import ru.homework.taskmanager.model.Task;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public interface TaskManager{
     //_____________________создание списков______________________________________
@@ -24,11 +24,11 @@ public interface TaskManager{
     Subtask updateSubtask(Subtask subtask);
 
     // ___________________получение списков______________________________________
-    ArrayList<Task> getTasks();
+    List<Task> getTasks();
 
-    ArrayList<Epic> getEpics();
+    List<Epic> getEpics();
 
-    ArrayList<Subtask> getSubtascs();
+    List<Subtask> getSubtascs();
 
     //_____________________получение задач по идентификатору______________________________________
     Task getTaskById(int taskId);
@@ -51,4 +51,5 @@ public interface TaskManager{
 
     boolean deleteSubtaskById(int subtaskId);
 
+    HistoryManager getHistoryManager();
 }
