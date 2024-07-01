@@ -153,11 +153,19 @@ public class Main {
         System.out.println(manager.getHistoryManager().getHistory());
         System.out.println("Получаем подзадачу по id=21)");
         System.out.println(manager.getSubtaskById(21));
-        System.out.println("Проверяем историю просмотров, список должен сместиться на 1 элемент");
+        System.out.println("Проверяем историю просмотров, список НЕ должен сместиться на 1 элемент");
         System.out.println(manager.getHistoryManager().getHistory());
         System.out.println("Получаем подзадачу по id=22)");
         System.out.println(manager.getSubtaskById(22));
         System.out.println("Проверяем историю просмотров, null не должен добавляться в список");
+        System.out.println(manager.getHistoryManager().getHistory());
+        System.out.println("Удаляем подзадачу по id=21");
+        System.out.println("Результат удаления подзадачу с id=21: " + manager.deleteSubtaskById(21));
+        System.out.println("Проверяем историю просмотров, список НЕ должен содержать подзадачу с id=21");
+        System.out.println(manager.getHistoryManager().getHistory());
+        System.out.println("Удаляем эпик по id=14");
+        System.out.println("Результат удаления эпика с id=14: " + manager.deleteEpicById(14));
+        System.out.println("Проверяем историю просмотров, список НЕ должен содержать эпик с id=14 и все подзадачи этого эпика с id=16,17,18");
         System.out.println(manager.getHistoryManager().getHistory());
         System.out.println("_________________________________________________________________________________");
 //_______________________________продолжение проверки работы истории___________________________________________
@@ -166,7 +174,23 @@ public class Main {
         System.out.println(manager2.createTask(task10));
         System.out.println("Получаем подзадачу по id=0)");
         System.out.println(manager2.getTaskById(0));
+        Task task11 = new Task("Задача2", "Проверка сохранения истории задачи2", TaskStatus.NEW);
+        System.out.println(manager2.createTask(task11));
+        System.out.println("Получаем подзадачу по id=1)");
+        System.out.println(manager2.getTaskById(1));
+        Task task12 = new Task("Задача3", "Проверка сохранения истории задачи3", TaskStatus.NEW);
+        System.out.println(manager2.createTask(task12));
+        System.out.println("Получаем подзадачу по id=2)");
+        System.out.println(manager2.getTaskById(2));
         System.out.println("Проверяем историю просмотров");
+        System.out.println(manager2.getHistoryManager().getHistory());
+        System.out.println("Получаем подзадачу по id=0)");
+        System.out.println(manager2.getTaskById(0));
+        System.out.println("Проверяем историю просмотров, элемент с id=0 должен переместиться в конец списка");
+        System.out.println(manager2.getHistoryManager().getHistory());
+        System.out.println("Получаем подзадачу по id=1)");
+        System.out.println(manager2.getTaskById(1));
+        System.out.println("Проверяем историю просмотров, элемент с id=1 должен переместиться в конец списка");
         System.out.println(manager2.getHistoryManager().getHistory());
     }
 }

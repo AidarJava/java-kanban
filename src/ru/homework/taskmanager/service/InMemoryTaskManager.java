@@ -184,6 +184,7 @@ public class InMemoryTaskManager implements TaskManager {
             return false;
         }
         tasks.remove(taskId);
+        historyManager.remove(taskId);
         return !tasks.containsKey(taskId);
     }
 
@@ -195,9 +196,11 @@ public class InMemoryTaskManager implements TaskManager {
         if (!epics.get(epicId).getSubtaskId().isEmpty()) {//проверка, что у эпика есть подзадачи
             for (Integer idSub : epics.get(epicId).getSubtaskId()) {
                 subtasks.remove(idSub);//удаляем подзадачи этого эпика
+                historyManager.remove(idSub);
             }
         }
         epics.remove(epicId);
+        historyManager.remove(epicId);
         return !epics.containsKey(epicId);
     }
 
@@ -209,6 +212,7 @@ public class InMemoryTaskManager implements TaskManager {
         int numEpicId = subtasks.get(subtaskId).getEpicId();//номер эпика, в котором лежит подзадача
         epics.get(numEpicId).getSubtaskId().remove(Integer.valueOf(subtaskId));//удаляем подзадачу из аррей листа эпика
         subtasks.remove(subtaskId);
+        historyManager.remove(subtaskId);
         updateEpic(epics.get(numEpicId));//обновление эпика
         updateEpicStatus(epics.get(numEpicId));
         return !subtasks.containsKey(subtaskId);
