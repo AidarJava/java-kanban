@@ -2,7 +2,6 @@ package ru.homework.taskmanager.model;
 
 import ru.homework.taskmanager.enums.TaskStatus;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class Task {
