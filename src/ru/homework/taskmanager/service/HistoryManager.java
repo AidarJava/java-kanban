@@ -1,10 +1,8 @@
 package ru.homework.taskmanager.service;
 
-import ru.homework.taskmanager.model.Node;
 import ru.homework.taskmanager.model.Task;
 
 import java.util.List;
-import java.util.Map;
 
 public interface HistoryManager {
 

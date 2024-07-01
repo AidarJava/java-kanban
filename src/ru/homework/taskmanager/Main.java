@@ -140,13 +140,13 @@ public class Main {
         Subtask sub12 = new Subtask("Подзадача6", "Проверка сохранения истории подзадачи6", TaskStatus.DONE, 15);
         System.out.println(manager.createSubtask(sub12));
         System.out.println("Заполняем список истории просмотров");
-        for (int i = 11; i <=13; i++) {
+        for (int i = 11; i <= 13; i++) {
             System.out.println(manager.getTaskById(i));
         }
-        for (int i = 14; i <=15 ; i++) {
+        for (int i = 14; i <= 15; i++) {
             System.out.println(manager.getEpicById(i));
-                    }
-        for (int i = 16; i <=20 ; i++) {
+        }
+        for (int i = 16; i <= 20; i++) {
             System.out.println(manager.getSubtaskById(i));
         }
         System.out.println("Проверяем историю просмотров");

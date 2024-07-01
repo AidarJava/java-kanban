@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class InMemoryHistoryManagerTest {
 
     @Test
-    public void addToHistoryShouldBeEqualsWithItInitial(){
+    public void addToHistoryShouldBeEqualsWithItInitial() {
         TaskManager manager = Managers.getDefault();
         Task task1 = new Task("Задача1", "Проверка создания1", TaskStatus.IN_PROGRESS);
         manager.createTask(task1);
@@ -21,12 +21,13 @@ class InMemoryHistoryManagerTest {
         final List<Task> history = manager.getHistoryManager().getHistory();
         assertNotNull(history, "История пустая.");
         assertEquals(1, history.size(), "История пустая.");
-        assertEquals(task1.getName(),history.getFirst().getName(),"Поле name не совпадает" );
-        assertEquals(task1.getDescription(),history.getFirst().getDescription(), "Поле description не совпадает");
-        assertEquals(task1.getStatus(),history.getFirst().getStatus(), "Статус не совпадает");
+        assertEquals(task1.getName(), history.getFirst().getName(), "Поле name не совпадает");
+        assertEquals(task1.getDescription(), history.getFirst().getDescription(), "Поле description не совпадает");
+        assertEquals(task1.getStatus(), history.getFirst().getStatus(), "Статус не совпадает");
     }
+
     @Test
-    public void addToHistoryEqualIdTasksShouldNotDoublingItInHistory(){
+    public void addToHistoryEqualIdTasksShouldNotDoublingItInHistory() {
         TaskManager manager = Managers.getDefault();
         Task task1 = new Task("Задача1", "Проверка создания1", TaskStatus.IN_PROGRESS);
         manager.createTask(task1);
@@ -35,8 +36,9 @@ class InMemoryHistoryManagerTest {
         final List<Task> history = manager.getHistoryManager().getHistory();
         assertEquals(1, history.size(), "Не удалилась повторяющая задача.");
     }
+
     @Test
-    public void addToHistoryTasksShouldPutItToEndOfHistory(){
+    public void addToHistoryTasksShouldPutItToEndOfHistory() {
         TaskManager manager = Managers.getDefault();
         Task task1 = new Task("Задача1", "Проверка создания1", TaskStatus.IN_PROGRESS);
         manager.createTask(task1);
@@ -53,8 +55,9 @@ class InMemoryHistoryManagerTest {
         assertEquals(history.getLast(), task1, "Не сработало перемещение в конец списка");
 
     }
+
     @Test
-    public void removeTaskShouldRemoveFromHistory(){
+    public void removeTaskShouldRemoveFromHistory() {
         TaskManager manager = Managers.getDefault();
         Task task1 = new Task("Задача1", "Проверка создания1", TaskStatus.IN_PROGRESS);
         manager.createTask(task1);
