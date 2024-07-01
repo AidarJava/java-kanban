@@ -56,7 +56,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     @Override
-    public void add(Task task) {//проверка на null была реализована в трех методах получения по идентификатору,оставил закомментированной
+    public void add(Task task) { //проверка на null была реализована в трех методах получения по идентификатору,оставил закомментированной
         if (task == null) {
             return;
         }
