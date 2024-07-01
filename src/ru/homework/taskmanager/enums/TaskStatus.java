@@ -1,6 +1,6 @@
 package ru.homework.taskmanager.enums;
 
-public enum TaskStatus{
+public enum TaskStatus {
     NEW,
     IN_PROGRESS,
     DONE
