@@ -28,7 +28,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         nodeMap.put(element.getId(), newNode);
     }
 
-    private void getTasks() {
+    private void updateHistory() {
         history.clear();
         Node<Task> node = head;
         while (node != null) {
@@ -56,7 +56,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     @Override
-    public void add(Task task) {//проверка на null была реализована в трех методах получения по идентификатору,оставил закомментированной
+    public void add(Task task) {
         if (task == null) {
             return;
         }
@@ -76,7 +76,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public List<Task> getHistory() {
-        getTasks(); //перекладываем задачи из связного списка в ArrayList
+        updateHistory(); //перекладываем задачи из связного списка в ArrayList
         return List.copyOf(history);
     }
 

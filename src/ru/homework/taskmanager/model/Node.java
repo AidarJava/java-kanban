@@ -12,4 +12,12 @@ public class Node<T> {
         this.prev = prev;
     }
 
+    @Override
+    public String toString() {
+        return "Node{" +
+                "data=" + data +
+                ", prev=" + (prev != null ? prev.data : "null") +
+                ", next=" + (next != null ? next.data : "null") +
+                '}';
+    }
 }
