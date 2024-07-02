@@ -24,10 +24,11 @@ public class TaskTest {
         assertEquals(1, tasks.size(), "Неверное количество задач.");
         assertEquals(task, tasks.get(0), "Задачи не совпадают.");
     }
+
     @Test
-    public void tasksShouldBeEqualsIfIdIsEqual(){
-        Task task1 = new Task("Задача1", "Проверка равенства1",1, TaskStatus.NEW);
-        Task task2 = new Task("Задача2", "Проверка равенства2",1, TaskStatus.IN_PROGRESS);
-        assertEquals(task1,task2, "Задачи не равны.");
+    public void tasksShouldBeEqualsIfIdIsEqual() {
+        Task task1 = new Task("Задача1", "Проверка равенства1", 1, TaskStatus.NEW);
+        Task task2 = new Task("Задача2", "Проверка равенства2", 1, TaskStatus.IN_PROGRESS);
+        assertEquals(task1, task2, "Задачи не равны.");
     }
 }

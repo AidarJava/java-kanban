@@ -4,9 +4,9 @@ import ru.homework.taskmanager.enums.TaskStatus;
 import ru.homework.taskmanager.model.Epic;
 import ru.homework.taskmanager.model.Subtask;
 import ru.homework.taskmanager.model.Task;
+
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class InMemoryTaskManager implements TaskManager {
     private int nextId;
@@ -16,8 +16,8 @@ public class InMemoryTaskManager implements TaskManager {
     private final HashMap<Integer, Epic> epics = new HashMap<>();
     HistoryManager historyManager;
 
-    public InMemoryTaskManager (HistoryManager historyManager){
-        this.historyManager=historyManager;
+    public InMemoryTaskManager(HistoryManager historyManager) {
+        this.historyManager = historyManager;
     }
 
     private int getNextId() {
@@ -71,7 +71,7 @@ public class InMemoryTaskManager implements TaskManager {
         ArrayList<Integer> subtaskIdToEpic = new ArrayList<>();
         if (!subtasks.isEmpty()) {
             for (Subtask sub : subtasks.values()) {
-                if (sub.getEpicId() == epic.getId() && !subtaskIdToEpic.contains(sub.id)) {//2-е условие-проверка на дублирование
+                if (sub.getEpicId() == epic.getId() && !subtaskIdToEpic.contains(sub.id)) { //2-е условие-проверка на дублирование
                     subtaskIdToEpic.add(sub.id);//добавлям id подзадачи в эпик
                 }
                 epic.setSubtaskId(subtaskIdToEpic);
@@ -90,7 +90,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (!epic.getSubtaskId().isEmpty()) {
             epic.status = TaskStatus.DONE;//авансом устанавливаем статус эпика
             for (Integer i : epic.getSubtaskId()) {
-                if (subtasks.get(i).status == TaskStatus.IN_PROGRESS || subtasks.get(i).status == TaskStatus.NEW) {//проверяем статус подзадач
+                if (subtasks.get(i).status == TaskStatus.IN_PROGRESS || subtasks.get(i).status == TaskStatus.NEW) { //проверяем статус подзадач
                     epic.status = TaskStatus.IN_PROGRESS;//если зашли, то меняем статус эпика
                 }
             }
@@ -127,27 +127,18 @@ public class InMemoryTaskManager implements TaskManager {
     //_____________________получение задач по идентификатору______________________________________
     @Override
     public Task getTaskById(int taskId) {
-//        if (tasks.get(taskId) != null) {
-//            historyManager.add(tasks.get(taskId));
-//        }
         historyManager.add(tasks.get(taskId));
         return tasks.get(taskId);
     }
 
     @Override
     public Task getEpicById(int epicId) {
-//        if (epics.get(epicId) != null) {
-//            historyManager.add(epics.get(epicId));
-//        }
         historyManager.add(epics.get(epicId));
         return epics.get(epicId);
     }
 
     @Override
     public Task getSubtaskById(int subtaskId) {
-//        if (subtasks.get(subtaskId) != null) {
-//            historyManager.add(subtasks.get(subtaskId));
-//        }
         historyManager.add(subtasks.get(subtaskId));
         return subtasks.get(subtaskId);
     }
@@ -184,6 +175,7 @@ public class InMemoryTaskManager implements TaskManager {
             return false;
         }
         tasks.remove(taskId);
+        historyManager.remove(taskId);
         return !tasks.containsKey(taskId);
     }
 
@@ -192,12 +184,14 @@ public class InMemoryTaskManager implements TaskManager {
         if (!epics.containsKey(epicId)) {
             return false;
         }
-        if (!epics.get(epicId).getSubtaskId().isEmpty()) {//проверка, что у эпика есть подзадачи
+        if (!epics.get(epicId).getSubtaskId().isEmpty()) { //проверка, что у эпика есть подзадачи
             for (Integer idSub : epics.get(epicId).getSubtaskId()) {
                 subtasks.remove(idSub);//удаляем подзадачи этого эпика
+                historyManager.remove(idSub);
             }
         }
         epics.remove(epicId);
+        historyManager.remove(epicId);
         return !epics.containsKey(epicId);
     }
 
@@ -209,12 +203,14 @@ public class InMemoryTaskManager implements TaskManager {
         int numEpicId = subtasks.get(subtaskId).getEpicId();//номер эпика, в котором лежит подзадача
         epics.get(numEpicId).getSubtaskId().remove(Integer.valueOf(subtaskId));//удаляем подзадачу из аррей листа эпика
         subtasks.remove(subtaskId);
+        historyManager.remove(subtaskId);
         updateEpic(epics.get(numEpicId));//обновление эпика
         updateEpicStatus(epics.get(numEpicId));
         return !subtasks.containsKey(subtaskId);
     }
+
     @Override
-   public HistoryManager getHistoryManager(){
+    public HistoryManager getHistoryManager() {
         return historyManager;
     }
 }

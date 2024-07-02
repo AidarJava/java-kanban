@@ -6,7 +6,7 @@ import ru.homework.taskmanager.model.Task;
 
 import java.util.List;
 
-public interface TaskManager{
+public interface TaskManager {
     //_____________________создание списков______________________________________
     Task createTask(Task task);
 
