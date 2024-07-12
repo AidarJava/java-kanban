@@ -6,10 +6,6 @@ import ru.homework.taskmanager.model.Task;
 import ru.homework.taskmanager.enums.TaskStatus;
 import ru.homework.taskmanager.service.*;
 
-import java.io.File;
-
-import static ru.homework.taskmanager.service.FileBackedTaskManager.loadFromFile;
-
 public class Main {
 
     public static void main(String[] args) {
