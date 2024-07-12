@@ -62,7 +62,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
 
         if (nodeMap.get(task.getId()) != null) {
-            removeNode(nodeMap.get(task.getId()));//удаляем однажды просмотренную задачу с тем же id
+            removeNode(nodeMap.get(task.getId())); //удаляем однажды просмотренную задачу с тем же id
         }
         linkLast(task);//добавляем просмотренную задачу в конец списка
     }
@@ -70,7 +70,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     @Override
     public void remove(int id) {
         if (nodeMap.get(id) != null) {
-            removeNode(nodeMap.get(id));//удаляем задачу из истории
+            removeNode(nodeMap.get(id)); //удаляем задачу из истории
         }
     }
 
@@ -79,5 +79,4 @@ public class InMemoryHistoryManager implements HistoryManager {
         updateHistory(); //перекладываем задачи из связного списка в ArrayList
         return List.copyOf(history);
     }
-
 }

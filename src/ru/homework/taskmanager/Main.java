@@ -6,6 +6,10 @@ import ru.homework.taskmanager.model.Task;
 import ru.homework.taskmanager.enums.TaskStatus;
 import ru.homework.taskmanager.service.*;
 
+import java.io.File;
+
+import static ru.homework.taskmanager.service.FileBackedTaskManager.loadFromFile;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -13,6 +17,7 @@ public class Main {
     }
 
     public static void testingTask() {
+
         TaskManager manager = Managers.getDefault();
         TaskManager manager2 = Managers.getDefault();
 
@@ -192,5 +197,6 @@ public class Main {
         System.out.println(manager2.getTaskById(1));
         System.out.println("Проверяем историю просмотров, элемент с id=1 должен переместиться в конец списка");
         System.out.println(manager2.getHistoryManager().getHistory());
+
     }
 }

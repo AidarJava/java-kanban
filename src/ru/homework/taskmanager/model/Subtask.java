@@ -1,9 +1,14 @@
 package ru.homework.taskmanager.model;
 
 import ru.homework.taskmanager.enums.TaskStatus;
+import ru.homework.taskmanager.enums.TaskType;
+
+import static ru.homework.taskmanager.enums.TaskType.SUBTASK;
+import static ru.homework.taskmanager.enums.TaskType.TASK;
 
 public class Subtask extends Task {
     private int epicId;
+    public static final TaskType type = SUBTASK;
 
     public Subtask(String name, String description, TaskStatus status, int epicId) {
         super(name, description, status);

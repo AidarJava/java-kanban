@@ -18,16 +18,27 @@ public class InMemoryTaskManager implements TaskManager {
 
     public InMemoryTaskManager(HistoryManager historyManager) {
         this.historyManager = historyManager;
+
     }
 
     private int getNextId() {
         return nextId++;
     }
 
+    public void setNextId(int nextId) {
+        this.nextId = nextId + 1;
+    }
+
     //_____________________создание списков______________________________________
     @Override
     public Task createTask(Task task) {
         task.setId(getNextId());
+        createTaskFromFile(task);
+        // tasks.put(task.getId(), task);
+        return task;
+    }
+
+    public Task createTaskFromFile(Task task) {
         tasks.put(task.getId(), task);
         return task;
     }
@@ -41,12 +52,31 @@ public class InMemoryTaskManager implements TaskManager {
         return epic;
     }
 
+    public Epic createEpicFromFile(Epic epic) {
+        // epic.setId(getNextId());
+        epics.put(epic.getId(), epic);
+        updateEpic(epic);
+        updateEpicStatus(epic);
+        return epic;
+    }
+
     @Override
     public Subtask createSubtask(Subtask subtask) {
         if (!epics.containsKey(subtask.getEpicId())) {
             return null;
         }
         subtask.setId(getNextId());
+        subtasks.put(subtask.getId(), subtask);
+        updateEpic(epics.get(subtask.getEpicId()));//обновляем эпик и добавляем в него эту подзадачу
+        updateEpicStatus(epics.get(subtask.getEpicId()));
+        return subtask;
+    }
+
+    public Subtask createSubtaskFromFile(Subtask subtask) {
+        if (!epics.containsKey(subtask.getEpicId())) {
+            return null;
+        }
+        //subtask.setId(getNextId());
         subtasks.put(subtask.getId(), subtask);
         updateEpic(epics.get(subtask.getEpicId()));//обновляем эпик и добавляем в него эту подзадачу
         updateEpicStatus(epics.get(subtask.getEpicId()));
@@ -77,6 +107,7 @@ public class InMemoryTaskManager implements TaskManager {
                 epic.setSubtaskId(subtaskIdToEpic);
             }
         }
+        updateEpicStatus(epic);
         epics.put(epic.getId(), epic);
         return epic;
     }

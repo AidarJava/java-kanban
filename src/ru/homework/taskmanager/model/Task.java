@@ -1,15 +1,18 @@
 package ru.homework.taskmanager.model;
 
 import ru.homework.taskmanager.enums.TaskStatus;
+import ru.homework.taskmanager.enums.TaskType;
 
 import java.util.Objects;
+
+import static ru.homework.taskmanager.enums.TaskType.TASK;
 
 public class Task {
     public String name;
     public String description;
     public Integer id;
     public TaskStatus status;
-
+    public static final TaskType type = TASK;
 
     public Task(String name, String description) {
         this.name = name;
@@ -54,6 +57,7 @@ public class Task {
     public void setId(Integer id) {
         this.id = id;
     }
+
 
     @Override
     public String toString() {

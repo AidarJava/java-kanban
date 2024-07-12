@@ -52,4 +52,5 @@ public interface TaskManager {
     boolean deleteSubtaskById(int subtaskId);
 
     HistoryManager getHistoryManager();
+
 }
