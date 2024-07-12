@@ -4,7 +4,6 @@ import ru.homework.taskmanager.enums.TaskStatus;
 import ru.homework.taskmanager.enums.TaskType;
 
 import static ru.homework.taskmanager.enums.TaskType.SUBTASK;
-import static ru.homework.taskmanager.enums.TaskType.TASK;
 
 public class Subtask extends Task {
     private int epicId;
