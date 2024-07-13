@@ -29,10 +29,11 @@ class SubtaskTest {
         assertEquals(1, subtasks.size(), "Неверное количество подзадач.");
         assertEquals(subtask, subtasks.get(0), "Подзадачи не совпадают.");
     }
+
     @Test
-    public void subtasksShouldBeEqualsIfIdIsEqual(){
+    public void subtasksShouldBeEqualsIfIdIsEqual() {
         Task sub1 = new Subtask("Подзадача1", "Проверка равенства1", 2, TaskStatus.NEW, 5);
-        Task sub2 = new Subtask("Подзадача2", "Проверка равенства2",2, TaskStatus.DONE, 5);
-        assertEquals(sub1,sub2,"Подзадачи не равны.");
+        Task sub2 = new Subtask("Подзадача2", "Проверка равенства2", 2, TaskStatus.DONE, 5);
+        assertEquals(sub1, sub2, "Подзадачи не равны.");
     }
 }

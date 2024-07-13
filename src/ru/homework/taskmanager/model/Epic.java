@@ -1,9 +1,14 @@
 package ru.homework.taskmanager.model;
 
+import ru.homework.taskmanager.enums.TaskType;
+
 import java.util.ArrayList;
+
+import static ru.homework.taskmanager.enums.TaskType.EPIC;
 
 public class Epic extends Task {
     private ArrayList<Integer> subtaskId = new ArrayList<>();
+    public static final TaskType type = EPIC;
 
     public Epic(String name, String description) {
         super(name, description);
