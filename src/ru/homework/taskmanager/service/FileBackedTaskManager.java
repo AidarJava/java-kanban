@@ -12,7 +12,6 @@ import java.io.FileWriter;
 import java.util.List;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
-    static int maxOldId = 0; //максимальный id обьектов из файла
     File myfile;
 
     public FileBackedTaskManager(HistoryManager historyManager, File file) {
@@ -54,17 +53,17 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             fileWriter.write("id;type;name;status;description;epic");
             fileWriter.write(System.lineSeparator());
             for (Task tsk : getTasks()) {
-                String str = toString(tsk);
+                String str = CSVUtil.toString(tsk);
                 fileWriter.write(str);
                 fileWriter.write(System.lineSeparator());
             }
             for (Epic epc : getEpics()) {
-                String str = toString(epc);
+                String str = CSVUtil.toString(epc);
                 fileWriter.write(str);
                 fileWriter.write(System.lineSeparator());
             }
             for (Subtask sub : getSubtascs()) {
-                String str = toString(sub);
+                String str = CSVUtil.toString(sub);
                 fileWriter.write(str);
                 fileWriter.write(System.lineSeparator());
             }
@@ -77,6 +76,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     public static FileBackedTaskManager loadFromFile(File file) {
         TaskManager manager = Managers.getDefault();
         FileBackedTaskManager loadManager = new FileBackedTaskManager(manager.getHistoryManager(), file);
+
         try (BufferedReader buf = new BufferedReader(new FileReader(file, StandardCharsets.UTF_8))) {
             List<String> list = new ArrayList<>();
             String l;
@@ -84,13 +84,13 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 list.add(l);
             }
             for (int i = 1; i < list.size(); i++) {
-                if (fromString(list.get(i)) != null) {
-                    if (fromString(list.get(i)).getClass() == Subtask.class) { //определяем класс обьекта
-                        loadManager.createSubtaskFromFile((Subtask) fromString(list.get(i))); //создаем обьект
-                    } else if (fromString(list.get(i)).getClass() == Epic.class) {
-                        loadManager.createEpicFromFile((Epic) fromString(list.get(i)));
-                    } else if (fromString(list.get(i)).getClass() == Task.class) {
-                        loadManager.createTaskFromFile(fromString(list.get(i)));
+                if (CSVUtil.fromString(list.get(i)) != null) {
+                    if (CSVUtil.fromString(list.get(i)).getClass() == Subtask.class) { //определяем класс обьекта
+                        loadManager.createSubtaskFromFile((Subtask) CSVUtil.fromString(list.get(i))); //создаем обьект
+                    } else if (CSVUtil.fromString(list.get(i)).getClass() == Epic.class) {
+                        loadManager.createEpicFromFile((Epic) CSVUtil.fromString(list.get(i)));
+                    } else if (CSVUtil.fromString(list.get(i)).getClass() == Task.class) {
+                        loadManager.createTaskFromFile(CSVUtil.fromString(list.get(i)));
                     } else {
                         System.out.println("Класс обьекта не был определен!");
                     }
@@ -102,52 +102,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         } catch (IOException e) {
             throw new ManagerSaveException("Произошла ошибка во время чтения файла.", e);
         }
-        loadManager.setNextId(maxOldId); //устанавливаем стартовый id у InMemoryTaskManager
+        loadManager.setNextId(CSVUtil.maxOldId); //устанавливаем стартовый id у InMemoryTaskManager
         return loadManager;
-    }
-
-    public static Task fromString(String value) {
-        String[] arr = value.split(";"); //разбиваем строку(в моем Exel запятая почему-то не проходит)
-        if (arr[1].equals("TASK")) { //исходя из параметра type, создаем подходящий обьект
-            Task task = new Task(arr[2], arr[4], Integer.parseInt(arr[0]), TaskStatus.valueOf(arr[3]));
-            maxOldId = Math.max(maxOldId, Integer.parseInt(arr[0]));
-            return task;
-        } else if (arr[1].equals("EPIC")) {
-            Epic epic = new Epic(arr[2], arr[4], Integer.parseInt(arr[0]));
-            maxOldId = Math.max(maxOldId, Integer.parseInt(arr[0]));
-            return epic;
-        } else if (arr[1].equals("SUBTASK")) {
-            Subtask subtask = new Subtask(arr[2], arr[4], Integer.parseInt(arr[0]), TaskStatus.valueOf(arr[3]), Integer.parseInt(arr[5]));
-            maxOldId = Math.max(maxOldId, Integer.parseInt(arr[0]));
-            return subtask;
-        } else {
-            return null;
-        }
-    }
-
-    public String toString(Task task) {
-        return task.id +
-                ";" + Task.type +
-                ";" + task.name +
-                ";" + task.status +
-                ";" + task.description;
-    }
-
-    public String toString(Epic task) {
-        return task.id +
-                ";" + Epic.type +
-                ";" + task.name +
-                ";" + task.status +
-                ";" + task.description;
-    }
-
-    public String toString(Subtask task) {
-        return task.id +
-                ";" + Subtask.type +
-                ";" + task.name +
-                ";" + task.status +
-                ";" + task.description +
-                ";" + task.getEpicId();
     }
 
     @Override
