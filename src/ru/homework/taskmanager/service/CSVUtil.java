@@ -17,8 +17,8 @@ public final class CSVUtil {
         if (arr[1].equals("TASK")) { //исходя из параметра type, создаем подходящий обьект
             int minutes = Integer.parseInt(arr[5]);
             Duration duration = Duration.ofMinutes(minutes);
-            Task task = new Task(arr[2], arr[4], Integer.parseInt(arr[0]), TaskStatus.valueOf(arr[3])
-                    , duration, LocalDateTime.parse(arr[6], DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")));
+            Task task = new Task(arr[2], arr[4], Integer.parseInt(arr[0]), TaskStatus.valueOf(arr[3]),
+            duration, LocalDateTime.parse(arr[6], DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")));
             maxOldId = Math.max(maxOldId, Integer.parseInt(arr[0]));
             return task;
         } else if (arr[1].equals("EPIC")) {
@@ -28,8 +28,8 @@ public final class CSVUtil {
         } else if (arr[1].equals("SUBTASK")) {
             int minutes = Integer.parseInt(arr[5]);
             Duration duration = Duration.ofMinutes(minutes);
-            Subtask subtask = new Subtask(arr[2], arr[4], Integer.parseInt(arr[0]), TaskStatus.valueOf(arr[3]), Integer.parseInt(arr[8])
-                    , duration, LocalDateTime.parse(arr[6], DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")));
+            Subtask subtask = new Subtask(arr[2], arr[4], Integer.parseInt(arr[0]), TaskStatus.valueOf(arr[3]), Integer.parseInt(arr[8]),
+            duration, LocalDateTime.parse(arr[6], DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")));
             maxOldId = Math.max(maxOldId, Integer.parseInt(arr[0]));
             return subtask;
         } else {
