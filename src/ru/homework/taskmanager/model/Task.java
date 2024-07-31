@@ -10,7 +10,7 @@ import java.util.Objects;
 
 import static ru.homework.taskmanager.enums.TaskType.TASK;
 
-public class Task {//implements Comparable<Task>{
+public class Task {
     public String name;
     public String description;
     public Integer id;
