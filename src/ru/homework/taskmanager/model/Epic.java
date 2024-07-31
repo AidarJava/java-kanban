@@ -31,7 +31,7 @@ public class Epic extends Task {
 
     @Override
     public String toString() {
-        if(startTime==null){
+        if (startTime == null) {
             return "Epic{" +
                     "name='" + name + '\'' +
                     ", description='" + description + '\'' +
@@ -46,10 +46,10 @@ public class Epic extends Task {
                 ", id=" + id +
                 ", status=" + status +
                 ", subtaskId=" + subtaskId +
-                ", duration=" +duration +
+                ", duration=" + duration +
                 ", startTime=" + startTime.format(formater) +
                 ", endTime=" + startTime.plus(duration)
-                .format(DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm"))+
+                .format(DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")) +
                 '}';
     }
 }
