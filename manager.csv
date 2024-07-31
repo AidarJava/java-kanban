@@ -1,0 +1,4 @@
+id;type;name;status;description;duration;startTime;endTime;epic
+1;TASK;Task2;NEW;Checking create2;5;10.01.2023, 01:33;10.01.2023, 01:38
+2;EPIC;Epic1;NEW;Checking create1
+4;EPIC;Epic1;NEW;Checking create1

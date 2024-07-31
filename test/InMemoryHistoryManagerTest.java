@@ -6,6 +6,8 @@ import ru.homework.taskmanager.service.InMemoryHistoryManager;
 import ru.homework.taskmanager.service.Managers;
 import ru.homework.taskmanager.service.TaskManager;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,7 +17,7 @@ class InMemoryHistoryManagerTest {
     @Test
     public void addToHistoryShouldBeEqualsWithItInitial() {
         TaskManager manager = Managers.getDefault();
-        Task task1 = new Task("Задача1", "Проверка создания1", TaskStatus.IN_PROGRESS);
+        Task task1 = new Task("Задача1", "Проверка создания1", TaskStatus.IN_PROGRESS, Duration.ofMinutes(5), LocalDateTime.of(2024, 1, 1, 1, 1));
         manager.createTask(task1);
         manager.getTaskById(0);
         final List<Task> history = manager.getHistoryManager().getHistory();
@@ -29,7 +31,7 @@ class InMemoryHistoryManagerTest {
     @Test
     public void addToHistoryEqualIdTasksShouldNotDoublingItInHistory() {
         TaskManager manager = Managers.getDefault();
-        Task task1 = new Task("Задача1", "Проверка создания1", TaskStatus.IN_PROGRESS);
+        Task task1 = new Task("Задача1", "Проверка создания1", TaskStatus.IN_PROGRESS, Duration.ofMinutes(6) ,LocalDateTime.of(2024, 1, 1, 1, 1));
         manager.createTask(task1);
         manager.getTaskById(0);
         manager.getTaskById(0);
@@ -40,11 +42,11 @@ class InMemoryHistoryManagerTest {
     @Test
     public void addToHistoryTasksShouldPutItToEndOfHistory() {
         TaskManager manager = Managers.getDefault();
-        Task task1 = new Task("Задача1", "Проверка создания1", TaskStatus.IN_PROGRESS);
+        Task task1 = new Task("Задача1", "Проверка создания1", TaskStatus.IN_PROGRESS,Duration.ofMinutes(5),LocalDateTime.of(2024, 1, 1, 1, 1));
         manager.createTask(task1);
-        Task task2 = new Task("Задача2", "Проверка создания2", TaskStatus.IN_PROGRESS);
+        Task task2 = new Task("Задача2", "Проверка создания2", TaskStatus.IN_PROGRESS,Duration.ofMinutes(2), LocalDateTime.of(2024, 2, 1, 1, 1));
         manager.createTask(task2);
-        Task task3 = new Task("Задача3", "Проверка создания3", TaskStatus.IN_PROGRESS);
+        Task task3 = new Task("Задача3", "Проверка создания3", TaskStatus.IN_PROGRESS,Duration.ofMinutes(7),LocalDateTime.of(2024, 5, 1, 4, 1));
         manager.createTask(task3);
         manager.getTaskById(0);
         manager.getTaskById(1);
@@ -59,7 +61,7 @@ class InMemoryHistoryManagerTest {
     @Test
     public void removeTaskShouldRemoveFromHistory() {
         TaskManager manager = Managers.getDefault();
-        Task task1 = new Task("Задача1", "Проверка создания1", TaskStatus.IN_PROGRESS);
+        Task task1 = new Task("Задача1", "Проверка создания1", TaskStatus.IN_PROGRESS,Duration.ofMinutes(4) ,LocalDateTime.of(2024, 1, 1, 1, 1));
         manager.createTask(task1);
         manager.getTaskById(0);
         manager.deleteTaskById(0);
