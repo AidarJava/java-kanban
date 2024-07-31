@@ -7,9 +7,12 @@ import ru.homework.taskmanager.model.Task;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.io.FileWriter;
 import java.util.List;
+import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
     File myfile;
@@ -29,45 +32,83 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             TaskManager taskManager = Managers.getDefault();
             manager = new FileBackedTaskManager(taskManager.getHistoryManager(), myfile);
         }
-        System.out.println("Создаем задачу");
-        Task task1 = new Task("Task1", "Checking create1", TaskStatus.NEW);
+        System.out.println("Создаем задачи");
+        LocalDateTime time1 = LocalDateTime.of(2024, 1, 1, 1, 1);
+        Task task1 = new Task("Task1", "Checking create1", TaskStatus.NEW, Duration.ofMinutes(5), time1);
         System.out.println(manager.createTask(task1));
+        LocalDateTime time11 = LocalDateTime.of(2023, 1, 10, 1, 33);
+        Task task2 = new Task("Task2", "Checking create2", TaskStatus.NEW, Duration.ofMinutes(5), time11);
+        System.out.println(manager.createTask(task2));
         System.out.println("Создаем эпик");
         Epic epic1 = new Epic("Epic1", "Checking create1");
         System.out.println(manager.createEpic(epic1));
         System.out.println("Создаем подзадачи");
-        Subtask sub1 = new Subtask("Subtask1", "Checking create1", TaskStatus.NEW, 1);
+        LocalDateTime time2 = LocalDateTime.of(2024, 2, 3, 3, 44);
+        Subtask sub1 = new Subtask("Subtask1", "Checking create1", TaskStatus.DONE, 2, Duration.ofMinutes(6), time2);
         System.out.println(manager.createSubtask(sub1));
-        Subtask sub2 = new Subtask("Subtask2", "Checking create2", TaskStatus.IN_PROGRESS, 1);
+        LocalDateTime time3 = LocalDateTime.of(2024, 2, 3, 3, 30);
+        Subtask sub2 = new Subtask("Subtask2", "Checking create2", TaskStatus.DONE, 2, Duration.ofMinutes(3), time3);
         System.out.println(manager.createSubtask(sub2));
-        Subtask sub3 = new Subtask("Subtask3", "Checking create3", TaskStatus.DONE, 1);
+        LocalDateTime time4 = LocalDateTime.of(2024, 6, 5, 5, 35);
+        Subtask sub3 = new Subtask("Subtask3", "Checking create3", TaskStatus.DONE, 2, Duration.ofMinutes(35), time4);
         System.out.println(manager.createSubtask(sub3));
         System.out.println("Проверяем списки");
         System.out.println(manager.getTasks());
         System.out.println(manager.getEpics());
         System.out.println(manager.getSubtascs());
+        System.out.println("Проверяем список по приоритету");
+        System.out.println(manager.getPrioritizedTasks());
+        System.out.println("Изменяем задачу Task1");
+        LocalDateTime time10 = LocalDateTime.of(2020, 4, 11, 11, 11);
+        Task task4 = new Task("Change_Task1", "Checking change", task1.getId(), TaskStatus.DONE,Duration.ofMinutes(3),time10);
+        manager.updateTask(task4);
+        System.out.println("Проверяем список по приоритету");
+        System.out.println(manager.getPrioritizedTasks());
+        System.out.println("Удаляем задачу task1");
+        manager.deleteTaskById(task1.getId());
+        System.out.println("Проверяем список по приоритету");
+        System.out.println(manager.getPrioritizedTasks());
+        System.out.println("Удаляем все подзадачи");
+        manager.deleteAllSubtasks();
+        System.out.println("Проверяем список по приоритету");
+        System.out.println(manager.getPrioritizedTasks());
     }
 
     public void save() {
         try (Writer fileWriter = new FileWriter(myfile, StandardCharsets.UTF_8)) {
-            fileWriter.write("id;type;name;status;description;epic");
+            fileWriter.write("id;type;name;status;description;duration;startTime;endTime;epic");
             fileWriter.write(System.lineSeparator());
-            for (Task tsk : getTasks()) {
-                String str = CSVUtil.toString(tsk);
-                fileWriter.write(str);
-                fileWriter.write(System.lineSeparator());
-            }
-            for (Epic epc : getEpics()) {
-                String str = CSVUtil.toString(epc);
-                fileWriter.write(str);
-                fileWriter.write(System.lineSeparator());
-            }
-            for (Subtask sub : getSubtascs()) {
-                String str = CSVUtil.toString(sub);
-                fileWriter.write(str);
-                fileWriter.write(System.lineSeparator());
-            }
+            getTasks().stream()
+                    .map(CSVUtil::toString)
+                    .forEach(str -> {
+                        try {
+                            fileWriter.write(str);
+                            fileWriter.write(System.lineSeparator());
 
+                        } catch (IOException e) {
+                            throw new ManagerSaveException("Произошла ошибка c обьектом Задача во время записи файла.", e);
+                        }
+                    });
+            getEpics().stream()
+                    .map(CSVUtil::toString)
+                    .forEach(str -> {
+                        try {
+                            fileWriter.write(str);
+                            fileWriter.write(System.lineSeparator());
+                        } catch (IOException e) {
+                            throw new ManagerSaveException("Произошла ошибка c обьектом Эпик во время записи файла.", e);
+                        }
+                    });
+            getSubtascs().stream()
+                    .map(CSVUtil::toString)
+                    .forEach(str -> {
+                        try {
+                            fileWriter.write(str);
+                            fileWriter.write(System.lineSeparator());
+                        } catch (IOException e) {
+                            throw new ManagerSaveException("Произошла ошибка c обьектом Подзадача во время записи файла.", e);
+                        }
+                    });
         } catch (IOException e) {
             throw new ManagerSaveException("Произошла ошибка во время записи файла.", e);
         }
@@ -83,22 +124,21 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             while ((l = buf.readLine()) != null) { //читаем построчно из файла
                 list.add(l);
             }
-            for (int i = 1; i < list.size(); i++) {
-                if (CSVUtil.fromString(list.get(i)) != null) {
-                    if (CSVUtil.fromString(list.get(i)).getClass() == Subtask.class) { //определяем класс обьекта
-                        loadManager.createSubtaskFromFile((Subtask) CSVUtil.fromString(list.get(i))); //создаем обьект
-                    } else if (CSVUtil.fromString(list.get(i)).getClass() == Epic.class) {
-                        loadManager.createEpicFromFile((Epic) CSVUtil.fromString(list.get(i)));
-                    } else if (CSVUtil.fromString(list.get(i)).getClass() == Task.class) {
-                        loadManager.createTaskFromFile(CSVUtil.fromString(list.get(i)));
-                    } else {
-                        System.out.println("Класс обьекта не был определен!");
-                    }
-                } else {
-                    System.out.println("Файл содержал недоступные для восстановления истории обьекты!");
-                }
-
-            }
+            list.stream()
+                    .skip(1)
+                    .map(CSVUtil::fromString)
+                    .filter(Objects::nonNull)
+                    .forEach(ob -> {
+                        if (ob.getClass() == Subtask.class) { //определяем класс обьекта
+                            loadManager.createSubtaskFromFile((Subtask) ob); //создаем обьект
+                        } else if (ob.getClass() == Epic.class) {
+                            loadManager.createEpicFromFile((Epic) ob);
+                        } else if (ob.getClass() == Task.class) {
+                            loadManager.createTaskFromFile(ob);
+                        } else {
+                            System.out.println("Класс обьекта не был определен!");
+                        }
+                    });
         } catch (IOException e) {
             throw new ManagerSaveException("Произошла ошибка во время чтения файла.", e);
         }
