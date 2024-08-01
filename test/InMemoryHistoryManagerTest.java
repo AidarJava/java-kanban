@@ -19,7 +19,7 @@ class InMemoryHistoryManagerTest {
         TaskManager manager = Managers.getDefault();
         Task task1 = new Task("Задача1", "Проверка создания1", TaskStatus.IN_PROGRESS, Duration.ofMinutes(5), LocalDateTime.of(2024, 1, 1, 1, 1));
         manager.createTask(task1);
-        manager.getTaskById(0);
+        manager.getTaskById(task1.getId());
         final List<Task> history = manager.getHistoryManager().getHistory();
         assertNotNull(history, "История пустая.");
         assertEquals(1, history.size(), "История пустая.");
@@ -48,10 +48,10 @@ class InMemoryHistoryManagerTest {
         manager.createTask(task2);
         Task task3 = new Task("Задача3", "Проверка создания3", TaskStatus.IN_PROGRESS,Duration.ofMinutes(7),LocalDateTime.of(2024, 5, 1, 4, 1));
         manager.createTask(task3);
-        manager.getTaskById(0);
-        manager.getTaskById(1);
-        manager.getTaskById(2);
-        manager.getTaskById(0);
+        manager.getTaskById(task1.getId());
+        manager.getTaskById(task2.getId());
+        manager.getTaskById(task3.getId());
+        manager.getTaskById(task1.getId());
         final List<Task> history = manager.getHistoryManager().getHistory();
         assertEquals(history.getFirst(), task2, "Не сработало перемещение в конец списка");
         assertEquals(history.getLast(), task1, "Не сработало перемещение в конец списка");

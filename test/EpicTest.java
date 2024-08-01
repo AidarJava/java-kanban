@@ -51,17 +51,17 @@ void statusEpicIsDoneOrInProgress() {
     TaskManager taskManager = Managers.getDefault();
     Epic epic = new Epic("Эпик", "Проверка создания");
     taskManager.createEpic(epic);
-    Subtask sub1 = new Subtask("Подзадача1", "Проверка создания1", TaskStatus.DONE, 0, Duration.ofMinutes(5),
+    Subtask sub1 = new Subtask("Подзадача1", "Проверка создания1", TaskStatus.DONE, epic.getId(), Duration.ofMinutes(5),
             LocalDateTime.of(2024, 2, 3, 3, 44));
     taskManager.createSubtask(sub1);
-    Subtask sub2 = new Subtask("Подзадача2", "Проверка создания2", TaskStatus.DONE, 0,Duration.ofMinutes(1),
+    Subtask sub2 = new Subtask("Подзадача2", "Проверка создания2", TaskStatus.DONE, epic.getId(),Duration.ofMinutes(1),
             LocalDateTime.of(2024, 2, 3, 3, 30));
     taskManager.createSubtask(sub2);
-    Subtask sub3 = new Subtask("Подзадача3", "Проверка создания3", TaskStatus.DONE, 0,Duration.ofMinutes(2),
+    Subtask sub3 = new Subtask("Подзадача3", "Проверка создания3", TaskStatus.DONE, epic.getId(),Duration.ofMinutes(2),
             LocalDateTime.of(2024, 6, 5, 5, 35));
     taskManager.createSubtask(sub3);
     assertEquals(epic.status, TaskStatus.DONE, "Статусы не совпадают.");
-    Subtask sub4 = new Subtask("Изм_подз1", "Проверка изменения", sub2.getId(), TaskStatus.NEW, 0,Duration.ofMinutes(1),
+    Subtask sub4 = new Subtask("Изм_подз1", "Проверка изменения", sub2.getId(), TaskStatus.NEW, epic.getId(),Duration.ofMinutes(1),
             LocalDateTime.of(2024, 2, 3, 3, 30));
     taskManager.updateSubtask(sub4);
     assertEquals(epic.status, TaskStatus.IN_PROGRESS, "Статусы не совпадают.");

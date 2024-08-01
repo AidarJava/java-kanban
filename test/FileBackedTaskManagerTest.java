@@ -35,9 +35,9 @@ public class FileBackedTaskManagerTest {
         Epic epic1 = new Epic("Epic1", "Checking create1");
         System.out.println(manager.createEpic(epic1));
         System.out.println("Создаем подзадачи");
-        Subtask sub1 = new Subtask("Subtask1", "Checking create1", TaskStatus.NEW, 1,Duration.ofMinutes(15),LocalDateTime.of(2024, 2, 3, 3, 44));
+        Subtask sub1 = new Subtask("Subtask1", "Checking create1", TaskStatus.NEW, epic1.getId(),Duration.ofMinutes(15),LocalDateTime.of(2024, 2, 3, 3, 44));
         System.out.println(manager.createSubtask(sub1));
-        Subtask sub2 = new Subtask("Subtask1", "Checking create2", TaskStatus.NEW, 1,Duration.ofMinutes(2),LocalDateTime.of(2024, 2, 3, 3, 47));
+        Subtask sub2 = new Subtask("Subtask1", "Checking create2", TaskStatus.NEW, epic1.getId(),Duration.ofMinutes(2),LocalDateTime.of(2024, 2, 3, 3, 47));
         System.out.println(manager.createSubtask(sub2));
         assertEquals(manager.getSubtascs().size(), 1,"Пересечение интервалов!.");
         TaskManager manager2 = loadFromFile(tempFile);
