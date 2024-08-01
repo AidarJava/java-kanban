@@ -6,6 +6,8 @@ import ru.homework.taskmanager.model.Task;
 import ru.homework.taskmanager.service.InMemoryHistoryManager;
 import ru.homework.taskmanager.service.InMemoryTaskManager;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -14,26 +16,26 @@ class InMemoryTaskManagerTest {
     @Test
     public void shouldInMemoryTaskManagerCanCreateAndFindForId() {
         InMemoryTaskManager manager = new InMemoryTaskManager(new InMemoryHistoryManager());
-        Task task1 = new Task("Задача1", "Проверка создания1", TaskStatus.NEW);
+        Task task1 = new Task("Задача1", "Проверка создания1", TaskStatus.NEW, Duration.ofMinutes(7),LocalDateTime.of(2024, 2, 8, 3, 47));
         manager.createTask(task1);
         assertNotNull(manager.getTasks(), "Не добавил задачу");
-        assertNotNull(manager.getTaskById(0), "Не нашел задачу по id");
+        assertNotNull(manager.getTaskById(task1.getId()), "Не нашел задачу по id");
         Epic epic1 = new Epic("Эпик1", "Проверка создания1");
         manager.createEpic(epic1);
         assertNotNull(manager.getEpics(), "Не добавил эпик");
-        assertNotNull(manager.getEpicById(1), "Не нашел эпик по id");
-        Subtask sub1 = new Subtask("Подзадача1", "Проверка создания1", TaskStatus.NEW, 1);
+        assertNotNull(manager.getEpicById(epic1.getId()), "Не нашел эпик по id");
+        Subtask sub1 = new Subtask("Подзадача1", "Проверка создания1", TaskStatus.NEW ,epic1.getId(),Duration.ofMinutes(6),LocalDateTime.of(2024, 2, 3, 3, 47));
         manager.createSubtask(sub1);
         assertNotNull(manager.getSubtascs(), "Не добавил подзадачу");
-        assertNotNull(manager.getSubtaskById(2), "Не нашел подзадачу по id");
+        assertNotNull(manager.getSubtaskById(sub1.getId()), "Не нашел подзадачу по id");
     }
 
     @Test
     public void shouldBeNoConflictWithGenAndCreate() {
         InMemoryTaskManager manager = new InMemoryTaskManager(new InMemoryHistoryManager());
-        Task task1 = new Task("Задача1", "Проверка конфликта1", TaskStatus.NEW);
+        Task task1 = new Task("Задача1", "Проверка конфликта1", TaskStatus.NEW,Duration.ofMinutes(2), LocalDateTime.of(2024, 2, 3, 3, 47));
         manager.createTask(task1);
-        Task task2 = new Task("Задача2", "Проверка конфликта2", 0, TaskStatus.IN_PROGRESS);
+        Task task2 = new Task("Задача2", "Проверка конфликта2", 0, TaskStatus.IN_PROGRESS,Duration.ofMinutes(1),LocalDateTime.of(2024, 1, 3, 3, 47));
         manager.getTasks().add(task2);
         assertEquals(1, manager.getTasks().size(), "Добавилась");
         manager.createTask(task2);
@@ -45,10 +47,10 @@ class InMemoryTaskManagerTest {
     @Test
     public void addToManagerShouldBeEqualsWithItInitial() {
         InMemoryTaskManager manager = new InMemoryTaskManager(new InMemoryHistoryManager());
-        Task task1 = new Task("Задача1", "Проверка создания1", TaskStatus.NEW);
+        Task task1 = new Task("Задача1", "Проверка создания1", TaskStatus.NEW,Duration.ofMinutes(9),LocalDateTime.of(2024, 2, 3, 3, 47));
         manager.createTask(task1);
-        assertEquals(task1.getName(), manager.getTaskById(0).getName());
-        assertEquals(task1.getDescription(), manager.getTaskById(0).getDescription());
-        assertEquals(task1.getStatus(), manager.getTaskById(0).getStatus());
+        assertEquals(task1.getName(), manager.getTaskById(task1.getId()).getName());
+        assertEquals(task1.getDescription(), manager.getTaskById(task1.getId()).getDescription());
+        assertEquals(task1.getStatus(), manager.getTaskById(task1.getId()).getStatus());
     }
 }
