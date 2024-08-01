@@ -3,15 +3,22 @@ package ru.homework.taskmanager.model;
 import ru.homework.taskmanager.enums.TaskType;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import static ru.homework.taskmanager.enums.TaskType.EPIC;
 
 public class Epic extends Task {
     private ArrayList<Integer> subtaskId = new ArrayList<>();
-    public static final TaskType type = EPIC;
-    public LocalDateTime endTime;
+    private static final TaskType type = EPIC;
+    private LocalDateTime endTime;
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
 
     public Epic(String name, String description) {
         super(name, description);
@@ -31,26 +38,22 @@ public class Epic extends Task {
 
     @Override
     public String toString() {
-        if (startTime == null) {
-            return "Epic{" +
-                    "name='" + name + '\'' +
-                    ", description='" + description + '\'' +
-                    ", id=" + id +
-                    ", status=" + status +
-                    ", subtaskId=" + subtaskId +
-                    '}';
+        StringBuilder str = new StringBuilder();
+        str.append(type).append("{")
+                .append("name='").append(name).append('\'')
+                .append(", description='").append(description).append('\'')
+                .append(", id=").append(id)
+                .append(", status=").append(status)
+                .append(", subtaskId=").append(subtaskId);
+
+        if (startTime != null) {
+            str.append(", duration=").append(duration)
+                    .append(", startTime=").append(startTime.format(FORMATTER))
+                    .append(", endTime=").append(startTime.plus(duration).format(FORMATTER));
         }
-        return "Epic{" +
-                "name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", id=" + id +
-                ", status=" + status +
-                ", subtaskId=" + subtaskId +
-                ", duration=" + duration +
-                ", startTime=" + startTime.format(formater) +
-                ", endTime=" + startTime.plus(duration)
-                .format(DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")) +
-                '}';
+
+        str.append('}');
+        return str.toString();
     }
 }
 

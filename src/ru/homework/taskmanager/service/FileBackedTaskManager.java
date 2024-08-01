@@ -142,7 +142,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         } catch (IOException e) {
             throw new ManagerSaveException("Произошла ошибка во время чтения файла.", e);
         }
-        loadManager.setNextId(CSVUtil.maxOldId); //устанавливаем стартовый id у InMemoryTaskManager
+        loadManager.setNextId(InMemoryTaskManager.getMaxOldId()); //устанавливаем стартовый id у InMemoryTaskManager
         return loadManager;
     }
 

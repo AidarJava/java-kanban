@@ -15,10 +15,10 @@ public class Task {
     public String description;
     public Integer id;
     public TaskStatus status;
-    public static final TaskType type = TASK;
+    private static final TaskType type = TASK;
     public Duration duration;
     public LocalDateTime startTime;
-    public DateTimeFormatter formater = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm");
+    public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm");
 
     public Task(String name, String description) {
         this.name = name;
@@ -66,8 +66,8 @@ public class Task {
         this.startTime = startTime;
     }
 
-    public LocalDateTime getEndTime(Task task) {
-        return task.startTime.plus(task.duration);
+    public LocalDateTime getEndTime() {
+        return this.startTime.plus(this.duration);
     }
 
     public Integer getId() {
@@ -81,25 +81,21 @@ public class Task {
 
     @Override
     public String toString() {
-        if (startTime == null) {
-            return "Task{" +
-                    "name='" + name + '\'' +
-                    ", description='" + description + '\'' +
-                    ", id=" + id +
-                    ", status=" + status +
-                    ", duration=" + duration +
-                    '}';
+        StringBuilder str = new StringBuilder();
+        str.append(type).append("{")
+                .append("name='").append(name).append('\'')
+                .append(", description='").append(description).append('\'')
+                .append(", id=").append(id)
+                .append(", status=").append(status)
+                .append(", duration=").append(duration);
+
+        if (startTime != null) {
+            str.append(", startTime=").append(startTime.format(FORMATTER))
+                    .append(", endTime=").append(startTime.plus(duration).format(FORMATTER));
         }
-        return "Task{" +
-                "name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", id=" + id +
-                ", status=" + status +
-                ", duration=" + duration +
-                ", startTime=" + startTime.format(formater) +
-                ", endTime=" + startTime.plus(duration)
-                .format(DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")) +
-                '}';
+
+        str.append('}');
+        return str.toString();
     }
 
     @Override

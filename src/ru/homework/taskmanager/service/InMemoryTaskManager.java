@@ -10,8 +10,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class InMemoryTaskManager implements TaskManager {
-    private int nextId;
 
+    private static int maxOldId; //максимальный id обьектов из файла
+    private static int nextId = maxOldId;
     private final HashMap<Integer, Task> tasks = new HashMap<>();
     private final HashMap<Integer, Subtask> subtasks = new HashMap<>();
     private final HashMap<Integer, Epic> epics = new HashMap<>();
@@ -28,6 +29,14 @@ public class InMemoryTaskManager implements TaskManager {
     public InMemoryTaskManager(HistoryManager historyManager) {
         this.historyManager = historyManager;
 
+    }
+
+    public static void setMaxOldId(int maxOldId) {
+        InMemoryTaskManager.maxOldId = maxOldId;
+    }
+
+    public static int getMaxOldId() {
+        return maxOldId;
     }
 
     private int getNextId() {
@@ -168,15 +177,15 @@ public class InMemoryTaskManager implements TaskManager {
         if (epic.getId() == null || !epics.containsKey(epic.getId())) {
             return;
         }
-        epic.endTime = null;//устанавливаем время завершения эпика если нет поздадач
+        epic.setEndTime(null);//устанавливаем время завершения эпика если нет поздадач
         epic.startTime = null;
         epic.duration = Duration.ofMinutes(0);
         if (!epic.getSubtaskId().isEmpty()) {
             epic.getSubtaskId().stream()
                     .map(subtasks::get)
                     .forEach(subtask -> {
-                        if (epic.endTime == null || epic.endTime.isBefore(subtask.startTime.plus(subtask.duration))) { //если время начала + продолжительность подзадачи дальше
-                            epic.endTime = subtask.startTime.plus(subtask.duration); //если зашли, то меняем время завершения эпика
+                        if (epic.getEndTime() == null || epic.getEndTime().isBefore(subtask.startTime.plus(subtask.duration))) { //если время начала + продолжительность подзадачи дальше
+                            epic.setEndTime(subtask.startTime.plus(subtask.duration)); //если зашли, то меняем время завершения эпика
                         }
                         if (epic.startTime == null || epic.startTime.isAfter(subtask.startTime)) {
                             epic.startTime = subtask.startTime;
