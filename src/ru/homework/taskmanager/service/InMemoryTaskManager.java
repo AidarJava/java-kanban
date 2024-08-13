@@ -60,7 +60,7 @@ public class InMemoryTaskManager implements TaskManager {
                 && task2.startTime.plus(task2.duration).isBefore(task1.startTime);
         return (start1LowerStart2AndEnd1LowerStart2 || start2LowerStart1AndEnd2LowerStart1);
     }
-
+@Override
     public boolean checkToaddNoIntersectTask(Task task) { //проверка на пересечение со старыми задачами
         Optional<Boolean> intersection = getPrioritizedTasks().stream()
                 .map(oldTask -> checkIntersection(task, oldTask))
@@ -81,6 +81,7 @@ public class InMemoryTaskManager implements TaskManager {
             createTaskFromFile(task);
             if (task.startTime != null) { //если дата начала указана добавляем в список
                 prioritizedTasks.add(task);
+                task.setEndTime(task.startTime.plus(task.duration));
             }
             return task;
         }
@@ -91,6 +92,7 @@ public class InMemoryTaskManager implements TaskManager {
         tasks.put(task.getId(), task);
         if (task.startTime != null) { //если дата начала указана добавляем в список
             prioritizedTasks.add(task);
+            task.setEndTime(task.startTime.plus(task.duration));
         }
         return task;
     }
@@ -123,6 +125,7 @@ public class InMemoryTaskManager implements TaskManager {
             updateEpicStatus(epics.get(subtask.getEpicId()));
             if (subtask.startTime != null) { //если дата начала указана добавляем в список
                 prioritizedTasks.add(subtask);
+                subtask.setEndTime(subtask.startTime.plus(subtask.duration));
             }
             return subtask;
         }
@@ -138,6 +141,7 @@ public class InMemoryTaskManager implements TaskManager {
         updateEpicStatus(epics.get(subtask.getEpicId()));
         if (subtask.startTime != null) { //если дата начала указана добавляем в список
             prioritizedTasks.add(subtask);
+            subtask.setEndTime(subtask.startTime.plus(subtask.duration));
         }
         return subtask;
     }
@@ -149,6 +153,7 @@ public class InMemoryTaskManager implements TaskManager {
             return null;
         }
         prioritizedTasks.remove(getTaskById(task.getId()));
+        task.setEndTime(task.startTime.plus(task.duration));
         tasks.put(task.getId(), task);
         prioritizedTasks.add(task);
         return task;
@@ -219,6 +224,7 @@ public class InMemoryTaskManager implements TaskManager {
             return null;
         }
         prioritizedTasks.remove(getSubtaskById((subtask.getId())));
+        subtask.setEndTime(subtask.startTime.plus(subtask.duration));
         subtasks.put(subtask.getId(), subtask);
         updateEpic(epics.get(subtask.getEpicId()));
         updateEpicStatus(epics.get(subtask.getEpicId()));
@@ -296,11 +302,15 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public boolean deleteTaskById(int taskId) {
         if (!tasks.containsKey(taskId)) {
+            System.out.println("Зашли----");
             return false;
         }
         prioritizedTasks.remove(getTaskById(taskId));
+        System.out.println("Зашли0");
         tasks.remove(taskId);
+        System.out.println("Зашли00");
         historyManager.remove(taskId);
+        System.out.println("Зашли000");
         return !tasks.containsKey(taskId);
     }
 

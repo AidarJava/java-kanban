@@ -18,6 +18,7 @@ public class Task {
     private static final TaskType type = TASK;
     public Duration duration;
     public LocalDateTime startTime;
+    public LocalDateTime endTime;
     public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm");
 
     public Task(String name, String description) {
@@ -33,6 +34,10 @@ public class Task {
 
     public String getName() {
         return name;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
     }
 
     public String getDescription() {
@@ -111,5 +116,12 @@ public class Task {
         return Objects.hash(id);
     }
 
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
 }
 

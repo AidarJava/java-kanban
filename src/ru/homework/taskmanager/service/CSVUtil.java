@@ -39,7 +39,6 @@ public final class CSVUtil {
 
             default:
                 return null;
-
         }
     }
 

@@ -8,9 +8,10 @@ import java.util.ArrayList;
 import static ru.homework.taskmanager.enums.TaskType.EPIC;
 
 public class Epic extends Task {
-    private ArrayList<Integer> subtaskId = new ArrayList<>();
+
     private static final TaskType type = EPIC;
     private LocalDateTime endTime;
+    private ArrayList<Integer> subtaskId = new ArrayList<>();
 
     public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
@@ -54,6 +55,10 @@ public class Epic extends Task {
 
         str.append('}');
         return str.toString();
+    }
+
+    public ArrayList<Integer> getSubtasks() {
+        return subtaskId;
     }
 }
 
