@@ -57,5 +57,6 @@ public interface TaskManager {
     HistoryManager getHistoryManager();
 
     Set<Task> getPrioritizedTasks();
+
     boolean checkToaddNoIntersectTask(Task task);
 }

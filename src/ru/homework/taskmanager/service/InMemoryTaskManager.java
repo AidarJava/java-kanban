@@ -60,7 +60,8 @@ public class InMemoryTaskManager implements TaskManager {
                 && task2.startTime.plus(task2.duration).isBefore(task1.startTime);
         return (start1LowerStart2AndEnd1LowerStart2 || start2LowerStart1AndEnd2LowerStart1);
     }
-@Override
+
+    @Override
     public boolean checkToaddNoIntersectTask(Task task) { //проверка на пересечение со старыми задачами
         Optional<Boolean> intersection = getPrioritizedTasks().stream()
                 .map(oldTask -> checkIntersection(task, oldTask))

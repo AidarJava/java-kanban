@@ -60,7 +60,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         System.out.println(manager.getPrioritizedTasks());
         System.out.println("Изменяем задачу Task1");
         LocalDateTime time10 = LocalDateTime.of(2020, 4, 11, 11, 11);
-        Task task4 = new Task("Change_Task1", "Checking change", task1.getId(), TaskStatus.DONE,Duration.ofMinutes(3),time10);
+        Task task4 = new Task("Change_Task1", "Checking change", task1.getId(), TaskStatus.DONE, Duration.ofMinutes(3), time10);
         manager.updateTask(task4);
         System.out.println("Проверяем список по приоритету");
         System.out.println(manager.getPrioritizedTasks());
