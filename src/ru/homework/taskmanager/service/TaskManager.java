@@ -5,8 +5,9 @@ import ru.homework.taskmanager.model.Subtask;
 import ru.homework.taskmanager.model.Task;
 
 import java.util.List;
+import java.util.Set;
 
-public interface TaskManager{
+public interface TaskManager {
     //_____________________создание списков______________________________________
     Task createTask(Task task);
 
@@ -20,6 +21,8 @@ public interface TaskManager{
     Epic updateEpic(Epic epic);
 
     void updateEpicStatus(Epic epic);
+
+    void getEndTime(Epic epic);
 
     Subtask updateSubtask(Subtask subtask);
 
@@ -52,4 +55,8 @@ public interface TaskManager{
     boolean deleteSubtaskById(int subtaskId);
 
     HistoryManager getHistoryManager();
+
+    Set<Task> getPrioritizedTasks();
+
+    boolean checkToaddNoIntersectTask(Task task);
 }

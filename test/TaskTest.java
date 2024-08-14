@@ -4,6 +4,8 @@ import ru.homework.taskmanager.service.*;
 
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -12,7 +14,7 @@ public class TaskTest {
     @Test
     void addNewTask() {
         TaskManager taskManager = Managers.getDefault();
-        Task task = new Task("Задача", "Проверка создания", TaskStatus.NEW);
+        Task task = new Task("Задача", "Проверка создания", TaskStatus.NEW, Duration.ofMinutes(4), LocalDateTime.of(2024, 2, 3, 3, 47));
         final int taskId = taskManager.createTask(task).getId();
         final Task savedTask = taskManager.getTaskById(taskId);
         assertNotNull(savedTask, "Задача не найдена.");
@@ -24,10 +26,11 @@ public class TaskTest {
         assertEquals(1, tasks.size(), "Неверное количество задач.");
         assertEquals(task, tasks.get(0), "Задачи не совпадают.");
     }
+
     @Test
-    public void tasksShouldBeEqualsIfIdIsEqual(){
-        Task task1 = new Task("Задача1", "Проверка равенства1",1, TaskStatus.NEW);
-        Task task2 = new Task("Задача2", "Проверка равенства2",1, TaskStatus.IN_PROGRESS);
-        assertEquals(task1,task2, "Задачи не равны.");
+    public void tasksShouldBeEqualsIfIdIsEqual() {
+        Task task1 = new Task("Задача1", "Проверка равенства1", 1, TaskStatus.NEW);
+        Task task2 = new Task("Задача2", "Проверка равенства2", 1, TaskStatus.IN_PROGRESS);
+        assertEquals(task1, task2, "Задачи не равны.");
     }
 }
