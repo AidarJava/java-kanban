@@ -28,14 +28,7 @@ public class TasksHttpHandler extends BaseHttpHandler implements HttpHandler {
                     String responseGet = HttpTaskServer.getGson().toJson(tasks);
                     sendText(httpExchange, responseGet, 200);
                 } else {
-                    if (taskManager.getTasks().contains(taskManager.getTaskById(idFromGet))) {
-                        Task task = taskManager.getTaskById(idFromGet);
-                        String responseGet = HttpTaskServer.getGson().toJson(task);
-                        sendText(httpExchange, responseGet, 200);
-                    } else {
-                        String str = "Такой задачи нет в списке!";
-                        sendNotFound(httpExchange, str);
-                    }
+                    checkAndResponseObjectFromManager("Task", idFromGet, taskManager, httpExchange);
                 }
                 break;
 
@@ -45,12 +38,11 @@ public class TasksHttpHandler extends BaseHttpHandler implements HttpHandler {
                 if (idFromPost == null) {
                     Task newTask = HttpTaskServer.getGson().fromJson(responsePost, Task.class);
                     if (!taskManager.checkToaddNoIntersectTask(newTask)) { //проверка на пересечение по времени
-                        String str = "Время выполнение задачи пересекается с существующими!";
-                        sendHasInteractions(httpExchange, str);
+                        sendHasInteractions(httpExchange, "Время выполнение задачи пересекается с существующими!");
                         break;
                     }
                     taskManager.createTask(newTask);
-                    if (taskManager.getTasks().contains(newTask)) { //проверка на успешное добавление
+                    if (taskContainsInManager(newTask.getId(), taskManager)) { //проверка на успешное добавление
                         sendText(httpExchange, responsePost, 201);
                         break;
                     }
@@ -63,12 +55,15 @@ public class TasksHttpHandler extends BaseHttpHandler implements HttpHandler {
             case "DELETE":
                 Integer idFromDelete = getIdFromPath(httpExchange.getRequestURI().getPath());
                 if (idFromDelete != null) {
-                    Task task = taskManager.getTaskById(idFromDelete);
-                    taskManager.deleteTaskById(idFromDelete);
-                    if (!taskManager.getTasks().contains(task)) {
-                        String responseGet = "Задача успешно удалена.";
-                        sendText(httpExchange, responseGet, 200);
-                        break;
+                    if (taskContainsInManager(idFromDelete, taskManager)) {
+                        Task task = taskManager.getTaskById(idFromDelete);
+                        taskManager.deleteTaskById(idFromDelete);
+                        if (!taskContainsInManager(task.getId(), taskManager)) {
+                            sendText(httpExchange, "Задача успешно удалена.", 200);
+                            break;
+                        }
+                    } else {
+                        sendNotFound(httpExchange, "Такой задачи нет в списке!");
                     }
                 }
                 break;

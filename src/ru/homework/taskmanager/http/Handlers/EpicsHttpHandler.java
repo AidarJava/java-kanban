@@ -28,33 +28,22 @@ public class EpicsHttpHandler extends BaseHttpHandler implements HttpHandler {
                 String stringFromGet = getStringFromPath(httpExchange.getRequestURI().getPath());
 
                 if (idFromGet != null) { //проверяем путь на наличие id
-                    System.out.println(idFromGet);
-                    System.out.println(stringFromGet);
-                    if (taskManager.getEpics().contains((Epic) taskManager.getEpicById(idFromGet))) {
-                        System.out.println(idFromGet);
-                        System.out.println(stringFromGet);
-
+                    if (epicContainsInManager(idFromGet, taskManager)) {
                         Epic epic = (Epic) taskManager.getEpicById(idFromGet);
-                        System.out.println("Зашли3");
                         if ("subtasks".equals(stringFromGet)) { //проверяем путь на запрос подзадач
-                            System.out.println("Зашли4");
                             List<Subtask> sub = epic.getSubtasks().stream()
                                     .map(inta -> (Subtask) taskManager.getSubtaskById(inta))
                                     .collect(Collectors.toList());
-                            System.out.println("Зашли5");
                             String responseGet = HttpTaskServer.getGson().toJson(sub);
-                            System.out.println("Зашли6");
                             sendText(httpExchange, responseGet, 200);
                             break;
                         } else {
-                            System.out.println("Зашли7");
                             String responseGet = HttpTaskServer.getGson().toJson(epic);
                             sendText(httpExchange, responseGet, 200);
                         }
 
                     } else {
-                        String str = "Такого эпика нет в списке!";
-                        sendNotFound(httpExchange, str);
+                        sendNotFound(httpExchange, "Такого эпика нет в списке!");
                     }
                 } else {
                     List<Epic> epics = taskManager.getEpics();
@@ -69,9 +58,8 @@ public class EpicsHttpHandler extends BaseHttpHandler implements HttpHandler {
                 if (idFromPost == null) {
                     Epic newEpic = HttpTaskServer.getGson().fromJson(responsePost, Epic.class);
                     taskManager.createEpic(newEpic);
-                    if (taskManager.getEpics().contains(newEpic)) { //проверка на успешное добавление
+                    if (epicContainsInManager(newEpic.getId(), taskManager)) { //проверка на успешное добавление
                         sendText(httpExchange, responsePost, 201);
-                        System.out.println(taskManager.getEpics());
                         break;
                     }
                 } else {
@@ -83,12 +71,15 @@ public class EpicsHttpHandler extends BaseHttpHandler implements HttpHandler {
             case "DELETE":
                 Integer idFromDelete = getIdFromPath(httpExchange.getRequestURI().getPath());
                 if (idFromDelete != null) {
-                    Epic epic = (Epic) taskManager.getEpicById(idFromDelete);
-                    taskManager.deleteEpicById(idFromDelete);
-                    if (!taskManager.getEpics().contains(epic)) {
-                        String responseGet = "Эпик успешно удален.";
-                        sendText(httpExchange, responseGet, 200);
-                        break;
+                    if (epicContainsInManager(idFromDelete, taskManager)) {
+                        Epic epic = (Epic) taskManager.getEpicById(idFromDelete);
+                        taskManager.deleteEpicById(idFromDelete);
+                        if (!epicContainsInManager(epic.getId(), taskManager)) {
+                            sendText(httpExchange, "Эпик успешно удален.", 200);
+                            break;
+                        }
+                    } else {
+                        sendNotFound(httpExchange, "Такого эпика нет в списке!");
                     }
                 }
                 break;

@@ -1,6 +1,10 @@
 package ru.homework.taskmanager.http.Handlers;
 
 import com.sun.net.httpserver.HttpExchange;
+import ru.homework.taskmanager.http.HttpTaskServer;
+import ru.homework.taskmanager.model.Epic;
+import ru.homework.taskmanager.model.Subtask;
+import ru.homework.taskmanager.service.TaskManager;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -45,4 +49,44 @@ public class BaseHttpHandler {
         }
         return null;
     }
+
+    protected boolean epicContainsInManager(Integer numId, TaskManager taskManager) {
+        return taskManager.getEpics().contains((Epic) taskManager.getEpicById(numId));
+    }
+
+    protected boolean subtaskContainsInManager(Integer numId, TaskManager taskManager) {
+        return taskManager.getSubtascs().contains((Subtask) taskManager.getSubtaskById(numId));
+    }
+
+    protected boolean taskContainsInManager(Integer numId, TaskManager taskManager) {
+        return taskManager.getTasks().contains(taskManager.getTaskById(numId));
+    }
+
+    protected void checkAndResponseObjectFromManager(String string, Integer idFromGet, TaskManager taskManager, HttpExchange httpExchange) throws IOException {
+        if ("Task".equals(string)) {
+            if (taskContainsInManager(idFromGet, taskManager)) {
+                String responseGet = HttpTaskServer.getGson().toJson(taskManager.getTaskById(idFromGet));
+                sendText(httpExchange, responseGet, 200);
+            } else {
+                sendNotFound(httpExchange, "Такой задачи нет в списке!");
+            }
+        } else if ("Subtask".equals(string)) {
+            if (subtaskContainsInManager(idFromGet, taskManager)) {
+                String responseGet = HttpTaskServer.getGson().toJson(taskManager.getSubtaskById(idFromGet));
+                sendText(httpExchange, responseGet, 200);
+            } else {
+                sendNotFound(httpExchange, "Такой подзадачи нет в списке!");
+            }
+        }
+
+    }
 }
+
+
+
+
+
+
+
+
+

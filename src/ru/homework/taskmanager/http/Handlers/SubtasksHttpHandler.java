@@ -28,14 +28,7 @@ public class SubtasksHttpHandler extends BaseHttpHandler implements HttpHandler 
                     String responseGet = HttpTaskServer.getGson().toJson(subtasks);
                     sendText(httpExchange, responseGet, 200);
                 } else {
-                    if (taskManager.getSubtascs().contains(taskManager.getSubtaskById(idFromGet))) {
-                        Subtask subtask = (Subtask) taskManager.getSubtaskById(idFromGet);
-                        String responseGet = HttpTaskServer.getGson().toJson(subtask);
-                        sendText(httpExchange, responseGet, 200);
-                    } else {
-                        String str = "Такой подзадачи нет в списке!";
-                        sendNotFound(httpExchange, str);
-                    }
+                    checkAndResponseObjectFromManager("Subtask", idFromGet, taskManager, httpExchange);
                 }
                 break;
 
@@ -50,7 +43,7 @@ public class SubtasksHttpHandler extends BaseHttpHandler implements HttpHandler 
                         break;
                     }
                     taskManager.createSubtask(newSubtask);
-                    if (taskManager.getSubtascs().contains(newSubtask)) { //проверка на успешное добавление
+                    if (subtaskContainsInManager(newSubtask.getId(), taskManager)) { //проверка на успешное добавление
                         sendText(httpExchange, responsePost, 201);
                         break;
                     }
@@ -63,12 +56,17 @@ public class SubtasksHttpHandler extends BaseHttpHandler implements HttpHandler 
             case "DELETE":
                 Integer idFromDelete = getIdFromPath(httpExchange.getRequestURI().getPath());
                 if (idFromDelete != null) {
-                    Subtask subtask = (Subtask) taskManager.getSubtaskById(idFromDelete);
-                    taskManager.deleteSubtaskById(idFromDelete);
-                    if (!taskManager.getSubtascs().contains(subtask)) {
-                        String responseGet = "Подзадача успешно удалена.";
-                        sendText(httpExchange, responseGet, 200);
-                        break;
+                    if (subtaskContainsInManager(idFromDelete, taskManager)) {
+                        Subtask subtask = (Subtask) taskManager.getSubtaskById(idFromDelete);
+                        taskManager.deleteSubtaskById(idFromDelete);
+                        if (!subtaskContainsInManager(subtask.getId(), taskManager)) {
+                            String responseGet = "Подзадача успешно удалена.";
+                            sendText(httpExchange, responseGet, 200);
+                            break;
+                        }
+                    } else {
+                        String str = "Такой подзадачи нет в списке!";
+                        sendNotFound(httpExchange, str);
                     }
                 }
                 break;
